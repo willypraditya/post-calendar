@@ -1,5 +1,5 @@
 {
-  "name": "react-starter-pack",
+  "name": "post-calendar",
   "version": "1.0.0",
   "description": "React Boilerplate without CRA",
   "main": "index.js",
@@ -15,8 +15,9 @@
   "homepage": "https://github.com/willypraditya/react-starter-pack#readme",
   "dependencies": {
     "antd": "^3.26.0",
+    "moment": "^2.24.0",
     "react": "^16.12.0",
-    "react-calendar": "^2.19.2",
+    "react-day-picker": "^7.4.0",
     "react-dom": "^16.12.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2"

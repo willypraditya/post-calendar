@@ -25,24 +25,49 @@
   padding: 10px;
 }
 
-.calendar-menu-button {
+.calendar-menu-daily-button{
   width: 85px;
-
-  &:hover {
-    background-color: #fdcb24;
-    color: #000000;
-    border-color: #fdcb24;
+  .ant-input{
+    &:hover {
+      background-color: #fdcb24;
+      color: #000000;
+      border-color: #fdcb24;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+    }
+  
+    &:active {
+      background-color: #fdcb24;
+      color: #000000;
+      border-color: #fdcb24;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+    }
+  
+    &:focus {
+      background-color: #fdcb24;
+      color: #000000;
+      border-color: #fdcb24;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+    }
+    
   }
+}
 
-  &:active {
-    background-color: #fdcb24;
-    color: #000000;
-    border-color: #fdcb24;
+.ant-calendar-picker-input{
+  color: #000000;
+  &::placeholder{
+    color: #000000
   }
+}
 
-  &:focus {
-    background-color: #fdcb24;
-    color: #000000;
-    border-color: #fdcb24;
+.ant-calendar-picker-input.ant-input{
+  &:hover{
+    border-color: #fdcb24 !important;
   }
+}
+
+.ant-calendar-picker-icon{
+  display: none
 }

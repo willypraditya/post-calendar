@@ -2,29 +2,16 @@ import React, { useState } from "react";
 import logo from "../../assets/logo.svg";
 import "./welcome.scss";
 import Calendar from "../Calendar";
+import moment from "moment";
 
-import {
-  Card,
-  Button,
-  Input,
-  Icon,
-  Dropdown,
-  Menu,
-  Row,
-  Col,
-  DatePicker
-} from "antd";
+import { Card, Button, Input, Icon, Dropdown, Menu, Row, Col } from "antd";
 
-// import Calendar from "react-calendar";
-// import Calendar from "react-calendar/dist/entry.nostyle";
-
-const { MonthPicker, RangePicker, WeekPicker } = DatePicker;
+import DayPicker from "react-day-picker";
 
 const Welcome = () => {
+  const [selectedDate, setSelectedDate] = useState();
   const [visible, setVisible] = useState(false);
-  const [selectedCalendar, setSelectedCalendar] = useState("daily");
-
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [calendarType, setCalendarType] = useState("");
 
   const handleVisibleChange = () => {
     setVisible(prevState => {
@@ -32,10 +19,46 @@ const Welcome = () => {
     });
   };
 
-  const handleDatePicker = () => {
-    setDatePickerVisible(prevState => {
-      return !prevState;
-    });
+  const renderCalendar = () => {
+    if (calendarType === "daily") {
+      return <DayPicker onDayClick={handleDayClick} />;
+    } else if (calendarType === "weekly") {
+      return (
+        <DayPicker
+          selectedDays={selectedDays}
+          showWeekNumbers
+          showOutsideDays
+          modifiers={modifiers}
+          onDayClick={this.handleDayChange}
+          onDayMouseEnter={this.handleDayEnter}
+          onDayMouseLeave={this.handleDayLeave}
+          onWeekClick={this.handleWeekClick}
+        />
+      );
+    }
+  };
+
+  const handleClickDaily = () => {
+    setCalendarType("daily");
+  };
+
+  const handleDayClick = day => {
+    setSelectedDate(moment(day).format("DD-MM-YYYY"));
+  };
+
+  const handleClickWeekly = () => {
+    setCalendarType("weekly");
+  };
+
+  const modifiersStyles = {
+    birthday: {
+      color: "white",
+      backgroundColor: "#ffc107"
+    },
+    thursdays: {
+      color: "#ffc107",
+      backgroundColor: "#fffdee"
+    }
   };
 
   const menu = (
@@ -47,28 +70,30 @@ const Welcome = () => {
         justify="center"
       >
         <Col span={6}>
-          <Button className="calendar-menu-button" onClick={handleDatePicker}>
+          <Button className="calendar-menu-button" onClick={handleClickDaily}>
             Harian
           </Button>
-          <DatePicker open={datePickerVisible}></DatePicker>
         </Col>
         <Col span={6}>
-          <Button className="calendar-menu-button">Mingguan</Button>
+          <Button className="calendar-menu-button" onClick={handleClickWeekly}>
+            Mingguan
+          </Button>
         </Col>
-        <Col span={6}>
+        {/* <Col span={6}>
           <Button className="calendar-menu-button">Bulanan</Button>
         </Col>
         <Col span={6}>
           <Button className="calendar-menu-button">Tahunan</Button>
-        </Col>
+        </Col> */}
       </Row>
+      {renderCalendar()}
     </Card>
   );
 
   return (
     <div style={{ margin: "20px" }}>
       <div>
-        {/* <Dropdown
+        <Dropdown
           overlay={menu}
           trigger={["click"]}
           visible={visible}
@@ -78,11 +103,11 @@ const Welcome = () => {
             className="calendar"
             prefix={<Icon type="calendar" />}
             suffix={<Icon type="caret-down" />}
-            // onClick={onCalendarClick}
             placeholder="Calendar"
+            value={selectedDate}
           ></Input>
-        </Dropdown> */}
-        <Calendar></Calendar>
+        </Dropdown>
+        {/* <Calendar></Calendar> */}
       </div>
     </div>
   );
