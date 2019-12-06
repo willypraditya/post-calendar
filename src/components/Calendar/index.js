@@ -3,6 +3,8 @@ import "./calendar.scss";
 import calendarIcon from "../../assets/ic-calendar.svg";
 import dropdownIcon from "../../assets/ic-dropdown.svg";
 
+import { Card } from "antd";
+
 const Calendar = () => {
   const [calendarVisible, setCalendarVisible] = useState(false);
 
@@ -23,7 +25,7 @@ const Calendar = () => {
         ></input>
       </div>
       <div className="calendar-container">
-        <h1>memek</h1>
+        <h1>tes</h1>
       </div>
     </div>
   );
