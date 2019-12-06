@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./index.scss";
 
 import HeaderLayout from "./components/Header";
-import Welcome from "./components/Welcome";
-import About from "./components/About";
+import Calendar from "./components/Calendar";
 
 const App = () => {
   return (
@@ -12,8 +11,7 @@ const App = () => {
       <div className="App">
         <HeaderLayout />
         <Switch>
-          <Route path="/" exact component={Welcome}></Route>
-          <Route path="/about" component={About}></Route>
+          <Route path="/" exact component={Calendar}></Route>
         </Switch>
       </div>
     </Router>

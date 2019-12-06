@@ -16,9 +16,6 @@ const HeaderLayout = () => (
       <Menu.Item className="header-menu" key="1">
         <Link to="/">Welcome</Link>
       </Menu.Item>
-      <Menu.Item className="header-menu" key="2">
-        <Link to="/about">About</Link>
-      </Menu.Item>
     </Menu>
   </Header>
 );
