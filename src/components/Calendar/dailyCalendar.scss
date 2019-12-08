@@ -1,0 +1,76 @@
+.calendar-daily-component {
+    border: 0px;
+    text-align: center;
+  
+    &__header {
+      border-width: 1px 0px 1px 0px;
+      border-style: solid;
+      border-color: #e6e6e6;
+      padding: 15px 0px 5px 0px;
+      &__prev-month-button {
+        float: left;
+        border: 0px;
+        margin-top: -3px;
+      }
+  
+      &__next-month-button {
+        float: right;
+        border: 0px;
+        margin-top: -3px;
+      }
+    }
+  
+    &__body {
+      margin: 20px 0px 20px 0px;
+  
+      &__days-header {
+        color: #7f8fa4;
+        margin-bottom: 15px;
+      }
+  
+      &__dates {
+        border: 0px;
+        width: 44px;
+        height: 44px;
+  
+        &__month-string {
+          text-align: center;
+        }
+  
+        &__today{
+          margin-top: 6px;
+          &__text{
+            font-size: 10px;
+            margin-top: -17px;
+            margin-left: -9px;
+          }
+        }
+
+        &:hover {
+          color: #000000;
+          background-color: #fdcb24;
+        }
+        &:focus {
+          color: #000000;
+          background-color: #fdcb24;
+        }
+  
+        &__active {
+          width: 44px;
+          height: 44px;
+          color: #000000;
+          background-color: #fdcb24;
+          &:hover {
+            color: #000000;
+            background-color: #fdcb24;
+            border-color: #fdcb24;
+          }
+          &:focus {
+            color: #000000;
+            background-color: #fdcb24;
+            border-color: #fdcb24;
+          }
+        }
+      }
+    }
+  }

@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import "./calendar.scss";
 import moment from "moment";
+import {
+  DailyCalendarContext,
+  WeeklyCalendarContext,
+  MonthlyCalendarContext
+} from "./calendarContext";
+import DailyCalendar from "./dailyCalendar";
+import WeeklyCalendar from "./weeklyCalendar";
+import MonthlyCalendar from "./monthlyCalendar";
 
 import { Card, Button, Input, Icon, Dropdown, Row, Col, List } from "antd";
 
@@ -40,7 +48,7 @@ const getWeekRangeList = (year, month) => {
 };
 
 const today = {
-  fullDate: moment().format("DD MMMM YYYY"),
+  fullDate: moment().format("DD-MM-YYYY"),
   currentMonth: moment().format("MM"),
   currentMonthString: moment().format("MMMM"),
   currentYear: moment().format("YYYY")
@@ -86,17 +94,28 @@ const Calendar = () => {
     setCalendarType("weekly");
   };
 
-  const onClickDailyDate = date => {
-    setSelectedDate(moment(date.target.value).format("DD-MMMM-YYYY"));
+  const handleClickMonthly = () => {
+    setDate(today);
+    setCalendarType("monthly");
   };
 
-  const onClickWeeklyDate = date => {
+  const onClickDailyDate = e => {
+    setSelectedDate(moment(e.target.value).format("DD-MMMM-YYYY"));
+  };
+
+  const onClickWeeklyDate = e => {
     setSelectedDate(
-      `${moment(JSON.parse(date.currentTarget.value).from).format(
+      `${moment(JSON.parse(e.currentTarget.value).from).format(
         "DD/MM/YYYY"
-      )} - ${moment(JSON.parse(date.currentTarget.value).to).format(
+      )} - ${moment(JSON.parse(e.currentTarget.value).to).format("DD/MM/YYYY")}`
+    );
+  };
+
+  const onClickMonthlyDate = e => {
+    setSelectedDate(
+      `${moment(JSON.parse(e.currentTarget.value).from).format(
         "DD/MM/YYYY"
-      )}`
+      )} - ${moment(JSON.parse(e.currentTarget.value).to).format("DD/MM/YYYY")}`
     );
   };
 
@@ -160,162 +179,65 @@ const Calendar = () => {
     setCurrentWeeklyCalendar(getWeekRangeList(y, m));
   };
 
+  const onClickMonthlyPrevYear = year => () => {
+    setDate({
+      currentYear: parseInt(year) - 1
+    });
+  };
+
+  const onClickMonthlyNextYear = year => () => {
+    setDate({
+      currentYear: parseInt(year) + 1
+    });
+  };
+
   const renderCalendar = () => {
     if (calendarType === "daily") {
       return (
-        <div className="calendar-daily-component">
-          <Row className="calendar-daily-component__header">
-            <Col span={7}>
-              <Button
-                className="calendar-daily-component__header__prev-month-button"
-                onClick={onClickDailyPrevMonth(
-                  date.currentYear,
-                  date.currentMonth
-                )}
-              >
-                <Icon type="left" />
-              </Button>
-            </Col>
-            <Col span={10}>
-              <h3 className="calendar-daily-component__header__month-string">
-                {`${date.currentMonthString} ${date.currentYear}`}
-              </h3>
-            </Col>
-            <Col span={7}>
-              <Button
-                className="calendar-daily-component__header__next-month-button"
-                onClick={onClickDailyNextMonth(
-                  date.currentYear,
-                  date.currentMonth
-                )}
-              >
-                <Icon type="right" />
-              </Button>
-            </Col>
-          </Row>
-
-          <div className="calendar-daily-component__body">
-            <Row
-              className="calendar-daily-component__body__days-header"
-              type="flex"
-              justify="center"
-            >
-              <Col span={3}>SU</Col>
-              <Col span={3}>MO</Col>
-              <Col span={3}>TU</Col>
-              <Col span={3}>WE</Col>
-              <Col span={3}>TH</Col>
-              <Col span={3}>Fr</Col>
-              <Col span={3}>SA</Col>
-            </Row>
-            {currentDailyCalendar.map(week => {
-              return (
-                <Row type="flex" justify="center" gutter={[8, 8]}>
-                  {week.map(day => {
-                    console.log(day);
-                    return (
-                      <Col span={3}>
-                        <Button
-                          className={
-                            moment(day).format("DD-MMMM-YYYY") === selectedDate
-                              ? "calendar-daily-component__body__dates__active"
-                              : "calendar-daily-component__body__dates"
-                          }
-                          value={day}
-                          onClick={onClickDailyDate}
-                        >
-                          {moment(day).format("DD MMMM YYYY") ===
-                          today.fullDate ? (
-                            <div>
-                              <p className="calendar-daily-component__body__dates__today">
-                                {moment(day).format("DD")}
-                              </p>
-                              <p className="calendar-daily-component__body__dates__today__text">
-                                Hari Ini
-                              </p>
-                            </div>
-                          ) : (
-                            moment(day).format("DD")
-                          )}
-                        </Button>
-                      </Col>
-                    );
-                  })}
-                </Row>
-              );
-            })}
-          </div>
-        </div>
+        <DailyCalendarContext.Provider
+          value={{
+            today,
+            date,
+            selectedDate,
+            currentDailyCalendar,
+            onClickDailyDate,
+            onClickDailyPrevMonth,
+            onClickDailyNextMonth
+          }}
+        >
+          <DailyCalendar />
+        </DailyCalendarContext.Provider>
       );
     } else if (calendarType === "weekly") {
       return (
-        <div className="calendar-weekly-component">
-          <Row className="calendar-weekly-component__header">
-            <Col span={7}>
-              <Button
-                className="calendar-weekly-component__header__prev-month-button"
-                onClick={onClickWeeklyPrevMonth(
-                  date.currentYear,
-                  date.currentMonth
-                )}
-              >
-                <Icon type="left" />
-              </Button>
-            </Col>
-            <Col span={10}>
-              <h3 className="calendar-weekly-component__month-string">
-                {`${date.currentMonthString} ${date.currentYear}`}
-              </h3>
-            </Col>
-            <Col span={7}>
-              <Button
-                className="calendar-weekly-component__header__next-month-button"
-                onClick={onClickWeeklyNextMonth(
-                  date.currentYear,
-                  date.currentMonth
-                )}
-              >
-                <Icon type="right" />
-              </Button>
-            </Col>
-          </Row>
-          {/* {console.log(getWeekRangeList(2019, 12))} */}
-          <div className="calendar-weekly-component__body">
-            <List>
-              {currentWeeklyCalendar.map((item, index) => {
-                console.log(item);
-                return (
-                  <List.Item>
-                    <Button
-                      className="calendar-weekly-component__body__list-button"
-                      className={
-                        `${moment(item.from).format("DD/MM/YYYY")} - ${moment(
-                          item.to
-                        ).format("DD/MM/YYYY")}` === selectedDate
-                          ? "calendar-weekly-component__body__list-button__active"
-                          : "calendar-weekly-component__body__list-button"
-                      }
-                      value={JSON.stringify(item)}
-                      onClick={onClickWeeklyDate}
-                    >
-                      <Row>
-                        <Col
-                          span={6}
-                          className="calendar-weekly-component__body__week-count-col"
-                        >
-                          Minggu ke-{index + 1}
-                        </Col>
-                        <Col span={4} offset={8}>{`${moment(item.from).format(
-                          "DD/MM/YYYY"
-                        )} - ${moment(item.to).format("DD/MM/YYYY")}`}</Col>
-                      </Row>
-                    </Button>
-                  </List.Item>
-                );
-              })}
-            </List>
-          </div>
-        </div>
+        <WeeklyCalendarContext.Provider
+          value={{
+            today,
+            date,
+            selectedDate,
+            currentWeeklyCalendar,
+            onClickWeeklyDate,
+            onClickWeeklyPrevMonth,
+            onClickWeeklyNextMonth
+          }}
+        >
+          <WeeklyCalendar />
+        </WeeklyCalendarContext.Provider>
+      );
+    } else if (calendarType === "monthly") {
+      return (
+        <MonthlyCalendarContext.Provider
+          value={{
+            today,
+            date,
+            selectedDate,
+            onClickMonthlyDate,
+            onClickMonthlyPrevYear,
+            onClickMonthlyNextYear
+          }}
+        >
+          <MonthlyCalendar />
+        </MonthlyCalendarContext.Provider>
       );
     }
   };
@@ -352,10 +274,19 @@ const Calendar = () => {
             Mingguan
           </Button>
         </Col>
-        {/* <Col span={6}>
-          <Button className="calendar-menu-button">Bulanan</Button>
-        </Col>
         <Col span={6}>
+          <Button
+            className={
+              calendarType === "monthly"
+                ? "calendar-menu__button__active"
+                : "calendar-menu__button"
+            }
+            onClick={handleClickMonthly}
+          >
+            Bulanan
+          </Button>
+        </Col>
+        {/* <Col span={6}>
           <Button className="calendar-menu-button">Tahunan</Button>
         </Col> */}
       </Row>
