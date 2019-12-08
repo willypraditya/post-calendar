@@ -4,11 +4,13 @@ import moment from "moment";
 import {
   DailyCalendarContext,
   WeeklyCalendarContext,
-  MonthlyCalendarContext
+  MonthlyCalendarContext,
+  YearlyCalendarContext
 } from "./calendarContext";
 import DailyCalendar from "./dailyCalendar";
 import WeeklyCalendar from "./weeklyCalendar";
 import MonthlyCalendar from "./monthlyCalendar";
+import YearlyCalendar from "./yearlyCalendar";
 
 import { Card, Button, Input, Icon, Dropdown, Row, Col, List } from "antd";
 
@@ -47,6 +49,15 @@ const getWeekRangeList = (year, month) => {
   }));
 };
 
+const getYearRange = year => {
+  let from = new Date(year, 0, 1);
+  let to = new Date(year + 1, 0, 0);
+  return {
+    from,
+    to
+  };
+};
+
 const today = {
   fullDate: moment().format("DD-MM-YYYY"),
   currentMonth: moment().format("MM"),
@@ -60,16 +71,16 @@ const Calendar = () => {
 
   const [date, setDate] = useState(today);
 
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("DD-MMMM-YYYY")
+  );
+
   const [currentDailyCalendar, setCurrentDailyCalendar] = useState(
     getCalendarDates(today.currentYear, today.currentMonth)
   );
 
   const [currentWeeklyCalendar, setCurrentWeeklyCalendar] = useState(
     getWeekRangeList(today.currentYear, today.currentMonth)
-  );
-
-  const [selectedDate, setSelectedDate] = useState(
-    moment().format("DD-MMMM-YYYY")
   );
 
   const handleVisibleChange = () => {
@@ -97,6 +108,11 @@ const Calendar = () => {
   const handleClickMonthly = () => {
     setDate(today);
     setCalendarType("monthly");
+  };
+
+  const handleClickYearly = () => {
+    setDate(today);
+    setCalendarType("yearly");
   };
 
   const onClickDailyDate = e => {
@@ -239,6 +255,12 @@ const Calendar = () => {
           <MonthlyCalendar />
         </MonthlyCalendarContext.Provider>
       );
+    } else if (calendarType === "yearly") {
+      return (
+        <YearlyCalendarContext.Provider value={{}}>
+          <YearlyCalendar />
+        </YearlyCalendarContext.Provider>
+      );
     }
   };
 
@@ -286,9 +308,18 @@ const Calendar = () => {
             Bulanan
           </Button>
         </Col>
-        {/* <Col span={6}>
-          <Button className="calendar-menu-button">Tahunan</Button>
-        </Col> */}
+        <Col span={6}>
+          <Button
+            // className={
+            //   calendarType === "monthly"
+            //     ? "calendar-menu__button__active"
+            //     : "calendar-menu__button"
+            // }
+            onClick={handleClickYearly}
+          >
+            Tahunan
+          </Button>
+        </Col>
       </Row>
       {renderCalendar()}
     </Card>
