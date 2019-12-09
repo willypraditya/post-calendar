@@ -50,14 +50,14 @@ const getWeekRangeList = (year, month) => {
   }));
 };
 
-// const getYearRange = year => {
-//   let from = new Date(year, 0, 1);
-//   let to = new Date(year + 1, 0, 0);
-//   return {
-//     from,
-//     to
-//   };
-// };
+const getYearRange = year => {
+  let from = new Date(year, 0, 1);
+  let to = new Date(year + 1, 0, 0);
+  return {
+    from,
+    to
+  };
+};
 
 const today = {
   fullDate: moment().format("DD-MM-YYYY"),
@@ -174,33 +174,33 @@ const Calendar = () => {
     setSelectedDateRange(dateRange);
   };
 
-  // const onClickDailyNextMonth = (year, month) => () => {
-  //   let m = parseInt(month) + 1;
-  //   let y = year;
-  //   if (m == 13) {
-  //     m = 1;
-  //     y++;
-  //   }
-  //   setDate({
-  //     currentMonth: m,
-  //     currentYear: y
-  //   });
-  //   setCurrentDailyCalendar(getCalendarDates(y, m));
-  // };
+  const onClickDailyNextMonth = (year, month) => () => {
+    let m = parseInt(month) + 1;
+    let y = year;
+    if (m == 13) {
+      m = 1;
+      y++;
+    }
+    setDate({
+      currentMonth: m,
+      currentYear: y
+    });
+    setCurrentDailyCalendar(getCalendarDates(y, m));
+  };
 
-  // const onClickDailyPrevMonth = (year, month) => () => {
-  //   let m = parseInt(month) - 1;
-  //   let y = year;
-  //   if (m == 0) {
-  //     m = 12;
-  //     y--;
-  //   }
-  //   setDate({
-  //     currentMonth: m,
-  //     currentYear: y
-  //   });
-  //   setCurrentDailyCalendar(getCalendarDates(y, m));
-  // };
+  const onClickDailyPrevMonth = (year, month) => () => {
+    let m = parseInt(month) - 1;
+    let y = year;
+    if (m == 0) {
+      m = 12;
+      y--;
+    }
+    setDate({
+      currentMonth: m,
+      currentYear: y
+    });
+    setCurrentDailyCalendar(getCalendarDates(y, m));
+  };
 
   const onClickWeeklyNextMonth = (year, month) => () => {
     let m = parseInt(month) + 1;
@@ -253,16 +253,16 @@ const Calendar = () => {
             hoveredDateRange,
             currentDailyCalendar,
             handleDateClick,
-            handleDateMouseOver
-            // onClickDailyPrevMonth,
-            // onClickDailyNextMonth
+            handleDateMouseOver,
+            onClickDailyPrevMonth,
+            onClickDailyNextMonth
           }}
         >
           <MonthHeaderSelector
             calendarType="daily"
             date={date}
             setDate={setDate}
-            getDailyCalendarDates={getDailyCalendarDates}
+            getCalendarDates={getCalendarDates}
             setCurrentDailyCalendar={setCurrentDailyCalendar}
           />
           <DailyCalendar />

@@ -7,6 +7,8 @@ import moment from "moment";
 
 import { Button, Icon, Row, Col } from "antd";
 
+import { getCalendarDates } from "./utils";
+
 const resolveDateStyle = (day, value) => {
   if (
     value.selectedDateRange != null &&
@@ -32,7 +34,7 @@ const DailyCalendar = () => {
       {value => {
         return (
           <div className="calendar-daily-component">
-            <MonthHeaderSelector />
+            {/* <MonthHeaderSelector /> */}
             <div className="calendar-daily-component__body">
               <Row
                 className="calendar-daily-component__body__days-header"
