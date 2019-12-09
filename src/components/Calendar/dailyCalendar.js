@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import MonthHeaderSelector from "./monthHeaderSelector";
 import { DailyCalendarContext } from "./calendarContext";
 import "./dailyCalendar.scss";
 
@@ -6,42 +7,32 @@ import moment from "moment";
 
 import { Button, Icon, Row, Col } from "antd";
 
+const resolveDateStyle = (day, value) => {
+  if (
+    value.selectedDateRange != null &&
+    value.selectedDateRange.to >= day &&
+    value.selectedDateRange.from <= day
+  ) {
+    return "calendar-daily-component__body__dates__active";
+  }
+
+  if (
+    value.hoveredDateRange != null &&
+    value.hoveredDateRange.to >= day &&
+    value.hoveredDateRange.from <= day
+  ) {
+    return "calendar-daily-component__body__dates__active";
+  }
+
+  return "calendar-daily-component__body__dates";
+};
 const DailyCalendar = () => {
   return (
     <DailyCalendarContext.Consumer>
       {value => {
         return (
           <div className="calendar-daily-component">
-            <Row className="calendar-daily-component__header">
-              <Col span={7}>
-                <Button
-                  className="calendar-daily-component__header__prev-month-button"
-                  onClick={value.onClickDailyPrevMonth(
-                    value.date.currentYear,
-                    value.date.currentMonth
-                  )}
-                >
-                  <Icon type="left" />
-                </Button>
-              </Col>
-              <Col span={10}>
-                <h3 className="calendar-daily-component__header__month-string">
-                  {`${value.date.currentMonthString} ${value.date.currentYear}`}
-                </h3>
-              </Col>
-              <Col span={7}>
-                <Button
-                  className="calendar-daily-component__header__next-month-button"
-                  onClick={value.onClickDailyNextMonth(
-                    value.date.currentYear,
-                    value.date.currentMonth
-                  )}
-                >
-                  <Icon type="right" />
-                </Button>
-              </Col>
-            </Row>
-
+            <MonthHeaderSelector />
             <div className="calendar-daily-component__body">
               <Row
                 className="calendar-daily-component__body__days-header"
@@ -56,34 +47,30 @@ const DailyCalendar = () => {
                 <Col span={3}>Fr</Col>
                 <Col span={3}>SA</Col>
               </Row>
-              {value.currentDailyCalendar.map(week => {
+              {value.currentDailyCalendar.map((week, i) => {
                 return (
                   <Row type="flex" justify="center" gutter={[8, 8]}>
-                    {week.map(day => {
+                    {week.map((day, j) => {
                       return (
                         <Col span={3}>
                           <Button
-                            className={
-                              moment(day).format("DD-MMMM-YYYY") ===
-                              value.selectedDate
-                                ? "calendar-daily-component__body__dates__active"
-                                : "calendar-daily-component__body__dates"
-                            }
+                            className={resolveDateStyle(day, value)}
                             value={day}
-                            onClick={value.onClickDailyDate}
+                            onClick={() => value.handleDateClick(i, j)}
+                            onMouseOver={() => value.handleDateMouseOver(i, j)}
                           >
                             {moment(day).format("DD-MM-YYYY") ===
                             value.today.fullDate ? (
                               <div>
                                 <p className="calendar-daily-component__body__dates__today">
-                                  {moment(day).format("DD")}
+                                  {moment(day).format("D")}
                                 </p>
                                 <p className="calendar-daily-component__body__dates__today__text">
                                   Hari Ini
                                 </p>
                               </div>
                             ) : (
-                              moment(day).format("DD")
+                              moment(day).format("D")
                             )}
                           </Button>
                         </Col>

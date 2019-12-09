@@ -7,6 +7,7 @@ import {
   MonthlyCalendarContext,
   YearlyCalendarContext
 } from "./calendarContext";
+import MonthHeaderSelector from "./monthHeaderSelector";
 import DailyCalendar from "./dailyCalendar";
 import WeeklyCalendar from "./weeklyCalendar";
 import MonthlyCalendar from "./monthlyCalendar";
@@ -49,19 +50,18 @@ const getWeekRangeList = (year, month) => {
   }));
 };
 
-const getYearRange = year => {
-  let from = new Date(year, 0, 1);
-  let to = new Date(year + 1, 0, 0);
-  return {
-    from,
-    to
-  };
-};
+// const getYearRange = year => {
+//   let from = new Date(year, 0, 1);
+//   let to = new Date(year + 1, 0, 0);
+//   return {
+//     from,
+//     to
+//   };
+// };
 
 const today = {
   fullDate: moment().format("DD-MM-YYYY"),
   currentMonth: moment().format("MM"),
-  currentMonthString: moment().format("MMMM"),
   currentYear: moment().format("YYYY")
 };
 
@@ -71,9 +71,15 @@ const Calendar = () => {
 
   const [date, setDate] = useState(today);
 
-  const [selectedDate, setSelectedDate] = useState(
-    moment().format("DD-MMMM-YYYY")
-  );
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    from: moment(),
+    end: moment()
+  });
+  const [hoveredDateRange, setHoveredDateRange] = useState(null);
+
+  const [datePick, setDatePick] = useState(moment().format("DD-MMMM-YYYY"));
+
+  const [clickCount, setClickCount] = useState(0);
 
   const [currentDailyCalendar, setCurrentDailyCalendar] = useState(
     getCalendarDates(today.currentYear, today.currentMonth)
@@ -82,6 +88,29 @@ const Calendar = () => {
   const [currentWeeklyCalendar, setCurrentWeeklyCalendar] = useState(
     getWeekRangeList(today.currentYear, today.currentMonth)
   );
+
+  const handleDateClick = (i, j) => {
+    let day = currentDailyCalendar[i][j];
+
+    if (clickCount % 2 === 0) {
+      setDatePick(day);
+      setSelectedDateRange(null);
+      setHoveredDateRange(null);
+    } else {
+      if (datePick != null) {
+        onRangeSelectedFromDailyCalendar(datePick, day);
+        setDatePick(null);
+      }
+    }
+    setClickCount(prevState => prevState + 1);
+  };
+
+  const handleDateMouseOver = (i, j) => {
+    let day = currentDailyCalendar[i][j];
+    if (datePick != null) {
+      onHoveredDailyCalendar(datePick, day);
+    }
+  };
 
   const handleVisibleChange = () => {
     setVisible(prevState => {
@@ -115,55 +144,63 @@ const Calendar = () => {
     setCalendarType("yearly");
   };
 
-  const onClickDailyDate = e => {
-    setSelectedDate(moment(e.target.value).format("DD-MMMM-YYYY"));
-  };
-
-  const onClickWeeklyDate = e => {
-    setSelectedDate(
-      `${moment(JSON.parse(e.currentTarget.value).from).format(
-        "DD/MM/YYYY"
-      )} - ${moment(JSON.parse(e.currentTarget.value).to).format("DD/MM/YYYY")}`
-    );
-  };
-
-  const onClickMonthlyDate = e => {
-    setSelectedDate(
-      `${moment(JSON.parse(e.currentTarget.value).from).format(
-        "DD/MM/YYYY"
-      )} - ${moment(JSON.parse(e.currentTarget.value).to).format("DD/MM/YYYY")}`
-    );
-  };
-
-  const onClickDailyNextMonth = (year, month) => () => {
-    let m = parseInt(month) + 1;
-    let y = year;
-    if (m == 13) {
-      m = 1;
-      y++;
+  const onRangeSelectedFromDailyCalendar = (from, to) => {
+    if (from > to) {
+      [from, to] = [to, from];
     }
-    setDate({
-      currentMonth: m,
-      currentMonthString: moment(m.toString()).format("MMMM"),
-      currentYear: y
+
+    setSelectedDateRange({
+      from,
+      to
     });
-    setCurrentDailyCalendar(getCalendarDates(y, m));
   };
 
-  const onClickDailyPrevMonth = (year, month) => () => {
-    let m = parseInt(month) - 1;
-    let y = year;
-    if (m == 0) {
-      m = 12;
-      y--;
+  const onHoveredDailyCalendar = (from, to) => {
+    if (from > to) {
+      [from, to] = [to, from];
     }
-    setDate({
-      currentMonth: m,
-      currentMonthString: moment(m.toString()).format("MMMM"),
-      currentYear: y
+
+    setHoveredDateRange({
+      from,
+      to
     });
-    setCurrentDailyCalendar(getCalendarDates(y, m));
   };
+
+  const onClickWeeklyDate = dateRange => {
+    setSelectedDateRange(dateRange);
+  };
+
+  const onClickMonthlyDate = dateRange => {
+    setSelectedDateRange(dateRange);
+  };
+
+  // const onClickDailyNextMonth = (year, month) => () => {
+  //   let m = parseInt(month) + 1;
+  //   let y = year;
+  //   if (m == 13) {
+  //     m = 1;
+  //     y++;
+  //   }
+  //   setDate({
+  //     currentMonth: m,
+  //     currentYear: y
+  //   });
+  //   setCurrentDailyCalendar(getCalendarDates(y, m));
+  // };
+
+  // const onClickDailyPrevMonth = (year, month) => () => {
+  //   let m = parseInt(month) - 1;
+  //   let y = year;
+  //   if (m == 0) {
+  //     m = 12;
+  //     y--;
+  //   }
+  //   setDate({
+  //     currentMonth: m,
+  //     currentYear: y
+  //   });
+  //   setCurrentDailyCalendar(getCalendarDates(y, m));
+  // };
 
   const onClickWeeklyNextMonth = (year, month) => () => {
     let m = parseInt(month) + 1;
@@ -174,7 +211,6 @@ const Calendar = () => {
     }
     setDate({
       currentMonth: m,
-      currentMonthString: moment(m.toString()).format("MMMM"),
       currentYear: y
     });
     setCurrentWeeklyCalendar(getWeekRangeList(y, m));
@@ -189,7 +225,6 @@ const Calendar = () => {
     }
     setDate({
       currentMonth: m,
-      currentMonthString: moment(m.toString()).format("MMMM"),
       currentYear: y
     });
     setCurrentWeeklyCalendar(getWeekRangeList(y, m));
@@ -214,13 +249,22 @@ const Calendar = () => {
           value={{
             today,
             date,
-            selectedDate,
+            selectedDateRange,
+            hoveredDateRange,
             currentDailyCalendar,
-            onClickDailyDate,
-            onClickDailyPrevMonth,
-            onClickDailyNextMonth
+            handleDateClick,
+            handleDateMouseOver
+            // onClickDailyPrevMonth,
+            // onClickDailyNextMonth
           }}
         >
+          <MonthHeaderSelector
+            calendarType="daily"
+            date={date}
+            setDate={setDate}
+            getDailyCalendarDates={getDailyCalendarDates}
+            setCurrentDailyCalendar={setCurrentDailyCalendar}
+          />
           <DailyCalendar />
         </DailyCalendarContext.Provider>
       );
@@ -230,13 +274,20 @@ const Calendar = () => {
           value={{
             today,
             date,
-            selectedDate,
+            selectedDateRange,
             currentWeeklyCalendar,
             onClickWeeklyDate,
             onClickWeeklyPrevMonth,
             onClickWeeklyNextMonth
           }}
         >
+          {/* <MonthHeaderSelector
+            calendarType="weekly"
+            date={date}
+            setDate={setDate}
+            getCalendarDates={getCalendarDates}
+            setCurrentDailyCalendar={setCurrentDailyCalendar}
+          /> */}
           <WeeklyCalendar />
         </WeeklyCalendarContext.Provider>
       );
@@ -246,7 +297,7 @@ const Calendar = () => {
           value={{
             today,
             date,
-            selectedDate,
+            selectedDateRange,
             onClickMonthlyDate,
             onClickMonthlyPrevYear,
             onClickMonthlyNextYear
@@ -310,11 +361,11 @@ const Calendar = () => {
         </Col>
         <Col span={6}>
           <Button
-            // className={
-            //   calendarType === "monthly"
-            //     ? "calendar-menu__button__active"
-            //     : "calendar-menu__button"
-            // }
+            className={
+              calendarType === "yearly"
+                ? "calendar-menu__button__active"
+                : "calendar-menu__button"
+            }
             onClick={handleClickYearly}
           >
             Tahunan
@@ -325,6 +376,13 @@ const Calendar = () => {
     </Card>
   );
 
+  let displayedDateRange = "";
+  if (selectedDateRange != null) {
+    displayedDateRange =
+      moment(selectedDateRange.from).format("DD-MM-YYYY") +
+      " - " +
+      moment(selectedDateRange.to).format("DD-MM-YYYY");
+  }
   return (
     <div style={{ margin: "20px" }}>
       <div>
@@ -339,7 +397,7 @@ const Calendar = () => {
             prefix={<Icon type="calendar" />}
             suffix={<Icon type="caret-down" />}
             placeholder="Calendar"
-            value={selectedDate}
+            value={displayedDateRange}
           ></Input>
         </Dropdown>
       </div>

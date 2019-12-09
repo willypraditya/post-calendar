@@ -10,15 +10,14 @@ const MonthlyCalendar = () => {
     let months = [];
 
     for (let index = 0; index < 11; index += 3) {
-      let chunk = moment.months().slice(index, index + 3);
-
-      months.push(chunk);
+      months.push([index + 1, index + 2, index + 3]);
     }
 
     return months;
   };
 
   const getMonthRange = (year, month) => {
+    console.log(year, month);
     let from = new Date(year, month - 1, 1);
     let to = new Date(year, month, 0);
     return {
@@ -61,12 +60,11 @@ const MonthlyCalendar = () => {
                 return (
                   <Row type="flex" justify="center" gutter={[1, 16]}>
                     {chunkedMonths.map(month => {
-                      const { from, to } = getMonthRange(
+                      let monthRange = getMonthRange(
                         value.date.currentYear,
-                        moment()
-                          .month(month)
-                          .format("MM")
+                        month
                       );
+                      const { from, to } = monthRange;
 
                       return (
                         <Col span={7}>
@@ -79,29 +77,27 @@ const MonthlyCalendar = () => {
                                 ? "calendar-monthly-component__body__month-button__active"
                                 : "calendar-monthly-component__body__month-button"
                             }
-                            value={JSON.stringify(
-                              getMonthRange(
-                                value.date.currentYear,
-                                moment()
-                                  .month(month)
-                                  .format("MM")
-                              )
-                            )}
-                            onClick={value.onClickMonthlyDate}
+                            onClick={() => value.onClickMonthlyDate(monthRange)}
                           >
-                            {value.today.currentMonthString == month &&
+                            {value.today.currentMonth == month &&
                             value.today.currentYear ==
                               value.date.currentYear ? (
                               <div>
                                 <p className="calendar-monthly-component__body__month-button__this-month">
-                                  {month}
+                                  {moment()
+                                    .months(month - 1)
+                                    .format("MMMM")}
                                 </p>
                                 <p className="calendar-monthly-component__body__month-button__this-month__text">
                                   Bulan Ini
                                 </p>
                               </div>
                             ) : (
-                              month
+                              <p className="calendar-monthly-component__body__month-button__this-month">
+                                {moment()
+                                  .months(month - 1)
+                                  .format("MMMM")}
+                              </p>
                             )}
                           </Button>
                         </Col>

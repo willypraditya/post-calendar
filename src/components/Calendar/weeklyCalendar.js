@@ -26,7 +26,9 @@ const WeeklyCalendar = () => {
               </Col>
               <Col span={10}>
                 <h3 className="calendar-weekly-component__month-string">
-                  {`${value.date.currentMonthString} ${value.date.currentYear}`}
+                  {`${moment()
+                    .months(value.date.currentMonth - 1)
+                    .format("MMMM")} ${value.date.currentYear}`}
                 </h3>
               </Col>
               <Col span={7}>
@@ -55,8 +57,7 @@ const WeeklyCalendar = () => {
                             ? "calendar-weekly-component__body__list-button__active"
                             : "calendar-weekly-component__body__list-button"
                         }
-                        value={JSON.stringify(item)}
-                        onClick={value.onClickWeeklyDate}
+                        onClick={() => value.onClickWeeklyDate(item)}
                       >
                         <Row className="calendar-weekly-component__body__list-row">
                           <Col span={6}>
