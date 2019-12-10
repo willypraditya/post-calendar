@@ -6,13 +6,17 @@ import HeaderLayout from "./components/Header";
 import Calendar from "./components/Calendar";
 
 const App = () => {
+  const onClickCalendarDate = date => {
+    console.log(date);
+  };
   return (
     <Router>
       <div className="App">
         <HeaderLayout />
-        <Switch>
+        <Calendar onClick={onClickCalendarDate} />
+        {/* <Switch>
           <Route path="/" exact component={Calendar}></Route>
-        </Switch>
+        </Switch> */}
       </div>
     </Router>
   );

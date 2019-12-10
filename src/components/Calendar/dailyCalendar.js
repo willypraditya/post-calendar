@@ -50,20 +50,28 @@ const DailyCalendar = () => {
   };
 
   const resolveDateStyle = (day, value) => {
-    if (value.selectedDateRange != null) {
-      const formattedDay = moment(day).format("YYYY-MM-DD");
-      const formattedDateFrom = moment(value.selectedDateRange.from).format(
-        "YYYY-MM-DD"
-      );
-      const formattedDateTo = moment(value.selectedDateRange.to).format(
-        "YYYY-MM-DD"
-      );
+    if (
+      value.selectedDateRange != null &&
+      value.selectedDateRange.hasOwnProperty("date")
+    ) {
+      if (moment(day).isSame(moment(value.selectedDateRange.date), "day"))
+        return "calendar-daily-component__body__dates__active";
+    }
 
-      if (moment(formattedDay).isSame(formattedDateFrom)) {
+    if (
+      value.selectedDateRange != null &&
+      value.selectedDateRange.hasOwnProperty("from") &&
+      value.selectedDateRange.hasOwnProperty("to")
+    ) {
+      if (moment(day).isSame(value.selectedDateRange.from, "day")) {
         return "calendar-daily-component__body__dates__active";
       }
-
-      if (moment(formattedDay).isBetween(formattedDateFrom, formattedDateTo)) {
+      if (
+        moment(day).isBetween(
+          value.selectedDateRange.from,
+          value.selectedDateRange.to
+        )
+      ) {
         return "calendar-daily-component__body__dates__range";
       }
     }
@@ -95,10 +103,15 @@ const DailyCalendar = () => {
             [from, to] = [to, from];
           }
 
-          value.setSelectedDateRange({
-            from,
-            to
-          });
+          if (moment(from).isSame(to)) {
+            value.setSelectedDateRange({
+              date: from
+            });
+          } else
+            value.setSelectedDateRange({
+              from,
+              to
+            });
         };
 
         const handleDateClick = (i, j) => {

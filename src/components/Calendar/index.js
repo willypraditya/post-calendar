@@ -20,15 +20,16 @@ const today = {
   currentYear: moment().format("YYYY")
 };
 
-const Calendar = () => {
+const Calendar = props => {
   const [visible, setVisible] = useState(false);
   const [calendarType, setCalendarType] = useState("daily");
 
   const [date, setDate] = useState(today);
 
   const [selectedDateRange, setSelectedDateRange] = useState({
-    from: moment(),
-    to: moment()
+    // from: moment(),
+    // to: moment()
+    date: moment()
   });
 
   const handleVisibleChange = () => {
@@ -179,11 +180,19 @@ const Calendar = () => {
   );
 
   let displayedDateRange = "";
-  if (selectedDateRange != null) {
+  if (
+    selectedDateRange != null &&
+    selectedDateRange.from != selectedDateRange.to
+  ) {
     displayedDateRange =
       moment(selectedDateRange.from).format("DD-MM-YYYY") +
       " - " +
       moment(selectedDateRange.to).format("DD-MM-YYYY");
+  } else if (
+    selectedDateRange != null &&
+    selectedDateRange.hasOwnProperty("date")
+  ) {
+    displayedDateRange = moment(selectedDateRange.date).format("DD-MM-YYYY");
   }
   return (
     <div style={{ margin: "20px" }}>
@@ -199,6 +208,7 @@ const Calendar = () => {
             prefix={<Icon type="calendar" />}
             suffix={<Icon type="caret-down" />}
             placeholder="Calendar"
+            onClick={props.onClick(selectedDateRange)}
             value={displayedDateRange}
           ></Input>
         </Dropdown>
