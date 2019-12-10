@@ -1,51 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { WeeklyCalendarContext } from "./calendarContext";
 import "./weeklyCalendar.scss";
+import MonthHeaderSelector from "./monthHeaderSelector";
 
 import moment from "moment";
 
 import { Button, Icon, Row, Col, List } from "antd";
+import { getWeekRangeList } from "./utils";
 
 const WeeklyCalendar = () => {
+  const reloadCalendar = x => {
+    let calendar = getWeekRangeList(x.year, x.month);
+    setMonthAndYear(x);
+    setWeeklyCalendar(calendar);
+  };
+
+  const [monthAndYear, setMonthAndYear] = useState({
+    year: moment().year(),
+    month: moment().month() + 1
+  });
+
+  const [weeklyCalendar, setWeeklyCalendar] = useState(
+    getWeekRangeList(monthAndYear.year, monthAndYear.month)
+  );
   return (
     <WeeklyCalendarContext.Consumer>
       {value => {
         return (
           <div className="calendar-weekly-component">
-            <Row className="calendar-weekly-component__header">
-              <Col span={7}>
-                <Button
-                  className="calendar-weekly-component__header__prev-month-button"
-                  onClick={value.onClickWeeklyPrevMonth(
-                    value.date.currentYear,
-                    value.date.currentMonth
-                  )}
-                >
-                  <Icon type="left" />
-                </Button>
-              </Col>
-              <Col span={10}>
-                <h3 className="calendar-weekly-component__month-string">
-                  {`${moment()
-                    .months(value.date.currentMonth - 1)
-                    .format("MMMM")} ${value.date.currentYear}`}
-                </h3>
-              </Col>
-              <Col span={7}>
-                <Button
-                  className="calendar-weekly-component__header__next-month-button"
-                  onClick={value.onClickWeeklyNextMonth(
-                    value.date.currentYear,
-                    value.date.currentMonth
-                  )}
-                >
-                  <Icon type="right" />
-                </Button>
-              </Col>
-            </Row>
+            <MonthHeaderSelector
+              monthAndYear={monthAndYear}
+              onChange={x => reloadCalendar(x)}
+            />
             <div className="calendar-weekly-component__body">
               <List>
-                {value.currentWeeklyCalendar.map((item, index) => {
+                {weeklyCalendar.map((item, index) => {
                   return (
                     <List.Item>
                       <Button

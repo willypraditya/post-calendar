@@ -72,6 +72,26 @@
           border-color: #fdcb24;
         }
       }
+
+      &__range {
+        width: 44px;
+        height: 44px;
+        color: #000000;
+        background-color: #fdcb24;
+        opacity: 0.7;
+        &:hover {
+          color: #000000;
+          background-color: #fdcb24;
+          border-color: #fdcb24;
+          opacity: 0.7;
+        }
+        &:focus {
+          color: #000000;
+          background-color: #fdcb24;
+          border-color: #fdcb24;
+          opacity: 0.7;
+        }
+      }
     }
   }
 }

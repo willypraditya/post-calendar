@@ -33,4 +33,13 @@ const getWeekRangeList = (year, month) => {
   }));
 };
 
-export { getCalendarDates, getWeekRangeList };
+const getYearRange = year => {
+  let from = new Date(year, 0, 1);
+  let to = new Date(year + 1, 0, 0);
+  return {
+    from,
+    to
+  };
+};
+
+export { getCalendarDates, getWeekRangeList, getYearRange };

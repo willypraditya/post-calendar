@@ -12,18 +12,10 @@ const MonthHeaderSelector = props => {
       m = 1;
       y++;
     }
-    props.setDate({
-      currentMonth: m,
-      currentYear: y
+    props.onChange({
+      month: m,
+      year: y
     });
-
-    props.setCurrentDailyCalendar(props.getCalendarDates(y, m));
-
-    // {
-    //   props.calendarType == "daily"
-    //     ? props.setCurrentDailyCalendar(props.getCalendarDates(y, m))
-    //     : props.setCurrentWeeklyCalendar(props.getWeekRangeList(y, m));
-    // }
   };
 
   const onClickPrevMonth = (year, month) => () => {
@@ -33,14 +25,13 @@ const MonthHeaderSelector = props => {
       m = 12;
       y--;
     }
-    props.setDate({
-      currentMonth: m,
-      currentYear: y
+    props.onChange({
+      month: m,
+      year: y
     });
-    props.setCurrentDailyCalendar(props.getCalendarDates(y, m));
   };
 
-  console.log(props.calendarType);
+  console.log(props.monthAndYear.month);
 
   return (
     <div className="month-header-component">
@@ -49,8 +40,8 @@ const MonthHeaderSelector = props => {
           <Button
             className="month-header-component__header__prev-month-button"
             onClick={onClickPrevMonth(
-              props.date.currentYear,
-              props.date.currentMonth
+              props.monthAndYear.year,
+              props.monthAndYear.month
             )}
           >
             <Icon type="left" />
@@ -59,16 +50,17 @@ const MonthHeaderSelector = props => {
         <Col span={10}>
           <h3 className="month-header-component__header__month-string">
             {`${moment()
-              .months(props.date.currentMonth - 1)
-              .format("MMMM")} ${props.date.currentYear}`}
+              .months(props.monthAndYear.month)
+              .subtract(1, "month")
+              .format("MMMM")} ${props.monthAndYear.year}`}
           </h3>
         </Col>
         <Col span={7}>
           <Button
             className="month-header-component__header__next-month-button"
             onClick={onClickNextMonth(
-              props.date.currentYear,
-              props.date.currentMonth
+              props.monthAndYear.year,
+              props.monthAndYear.month
             )}
           >
             <Icon type="right" />
