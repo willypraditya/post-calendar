@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { MonthlyCalendarContext } from "./calendarContext";
 import "./monthlyCalendar.scss";
@@ -6,6 +6,11 @@ import "./monthlyCalendar.scss";
 import { Button, Icon, Row, Col } from "antd";
 
 const MonthlyCalendar = () => {
+  const [monthAndYear, setMonthAndYear] = useState({
+    year: moment().year(),
+    month: moment().month() + 1
+  });
+
   const chunckMonth = () => {
     let months = [];
 
@@ -17,7 +22,6 @@ const MonthlyCalendar = () => {
   };
 
   const getMonthRange = (year, month) => {
-    console.log(year, month);
     let from = new Date(year, month - 1, 1);
     let to = new Date(year, month, 0);
     return {
@@ -26,29 +30,52 @@ const MonthlyCalendar = () => {
     };
   };
 
+  const onClickMonthlyPrevYear = year => () => {
+    setMonthAndYear(prevState => ({
+      ...prevState,
+      year: parseInt(year) - 1
+    }));
+  };
+
+  const onClickMonthlyNextYear = year => () => {
+    setMonthAndYear(prevState => ({
+      ...prevState,
+      year: parseInt(year) + 1
+    }));
+  };
+
   return (
     <MonthlyCalendarContext.Consumer>
       {value => {
+        const onClickMonthlyDate = dateRange => {
+          value.setSelectedDateRange(dateRange);
+        };
         return (
           <div className="calendar-monthly-component">
             <Row className="calendar-monthly-component__header">
               <Col span={7}>
                 <Button
                   className="calendar-monthly-component__header__prev-year-button"
-                  onClick={value.onClickMonthlyPrevYear(value.date.currentYear)}
+                  onClick={onClickMonthlyPrevYear(
+                    monthAndYear.year,
+                    monthAndYear.month
+                  )}
                 >
                   <Icon type="left" />
                 </Button>
               </Col>
               <Col span={10}>
                 <h3 className="calendar-monthly-component__year-string">
-                  {value.date.currentYear}
+                  {monthAndYear.year}
                 </h3>
               </Col>
               <Col span={7}>
                 <Button
                   className="calendar-monthly-component__header__next-year-button"
-                  onClick={value.onClickMonthlyNextYear(value.date.currentYear)}
+                  onClick={onClickMonthlyNextYear(
+                    monthAndYear.year,
+                    monthAndYear.month
+                  )}
                 >
                   <Icon type="right" />
                 </Button>
@@ -60,10 +87,7 @@ const MonthlyCalendar = () => {
                 return (
                   <Row type="flex" justify="center" gutter={[1, 16]}>
                     {chunkedMonths.map(month => {
-                      let monthRange = getMonthRange(
-                        value.date.currentYear,
-                        month
-                      );
+                      let monthRange = getMonthRange(monthAndYear.year, month);
                       const { from, to } = monthRange;
 
                       return (
@@ -77,11 +101,10 @@ const MonthlyCalendar = () => {
                                 ? "calendar-monthly-component__body__month-button__active"
                                 : "calendar-monthly-component__body__month-button"
                             }
-                            onClick={() => value.onClickMonthlyDate(monthRange)}
+                            onClick={() => onClickMonthlyDate(monthRange)}
                           >
-                            {value.today.currentMonth == month &&
-                            value.today.currentYear ==
-                              value.date.currentYear ? (
+                            {monthAndYear.month == month &&
+                            monthAndYear.year == moment().year() ? (
                               <div>
                                 <p className="calendar-monthly-component__body__month-button__this-month">
                                   {moment()

@@ -61,18 +61,6 @@ const Calendar = () => {
   //   setSelectedDateRange(dateRange);
   // };
 
-  // const onClickMonthlyPrevYear = year => () => {
-  //   setDate({
-  //     currentYear: parseInt(year) - 1
-  //   });
-  // };
-
-  // const onClickMonthlyNextYear = year => () => {
-  //   setDate({
-  //     currentYear: parseInt(year) + 1
-  //   });
-  // };
-
   const renderCalendar = () => {
     if (calendarType === "daily") {
       return (

@@ -23,9 +23,13 @@ const WeeklyCalendar = () => {
   const [weeklyCalendar, setWeeklyCalendar] = useState(
     getWeekRangeList(monthAndYear.year, monthAndYear.month)
   );
+
   return (
     <WeeklyCalendarContext.Consumer>
       {value => {
+        const onClickWeeklyDate = dateRange => {
+          value.setSelectedDateRange(dateRange);
+        };
         return (
           <div className="calendar-weekly-component">
             <MonthHeaderSelector
@@ -46,7 +50,7 @@ const WeeklyCalendar = () => {
                             ? "calendar-weekly-component__body__list-button__active"
                             : "calendar-weekly-component__body__list-button"
                         }
-                        onClick={() => value.onClickWeeklyDate(item)}
+                        onClick={() => onClickWeeklyDate(item)}
                       >
                         <Row className="calendar-weekly-component__body__list-row">
                           <Col span={6}>

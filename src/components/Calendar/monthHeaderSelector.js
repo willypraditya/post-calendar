@@ -31,8 +31,6 @@ const MonthHeaderSelector = props => {
     });
   };
 
-  console.log(props.monthAndYear.month);
-
   return (
     <div className="month-header-component">
       <Row className="month-header-component__header">
