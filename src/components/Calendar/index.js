@@ -39,16 +39,28 @@ const Calendar = () => {
 
   const handleClickDaily = () => {
     setDate(today);
+    // setSelectedDateRange({
+    //   from: moment(),
+    //   to: moment()
+    // });
     setCalendarType("daily");
   };
 
   const handleClickWeekly = () => {
     setDate(today);
+    // setSelectedDateRange({
+    //   from: moment(),
+    //   to: moment()
+    // });
     setCalendarType("weekly");
   };
 
   const handleClickMonthly = () => {
     setDate(today);
+    // setSelectedDateRange({
+    //   from: moment(),
+    //   to: moment()
+    // });
     setCalendarType("monthly");
   };
 

@@ -94,10 +94,14 @@ const MonthlyCalendar = () => {
                         <Col span={7}>
                           <Button
                             className={
-                              value.selectedDate ==
-                              `${moment(from).format("DD/MM/YYYY")} - ${moment(
-                                to
-                              ).format("DD/MM/YYYY")}`
+                              moment(from).isSame(
+                                value.selectedDateRange.from,
+                                "day"
+                              ) &&
+                              moment(to).isSame(
+                                value.selectedDateRange.to,
+                                "day"
+                              )
                                 ? "calendar-monthly-component__body__month-button__active"
                                 : "calendar-monthly-component__body__month-button"
                             }

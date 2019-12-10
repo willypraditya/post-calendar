@@ -42,11 +42,15 @@ const WeeklyCalendar = () => {
                   return (
                     <List.Item>
                       <Button
-                        className="calendar-weekly-component__body__list-button"
                         className={
-                          `${moment(item.from).format("DD/MM/YYYY")} - ${moment(
-                            item.to
-                          ).format("DD/MM/YYYY")}` === value.selectedDate
+                          moment(item.from).isSame(
+                            value.selectedDateRange.from,
+                            "day"
+                          ) &&
+                          moment(item.to).isSame(
+                            value.selectedDateRange.to,
+                            "day"
+                          )
                             ? "calendar-weekly-component__body__list-button__active"
                             : "calendar-weekly-component__body__list-button"
                         }
