@@ -24,55 +24,34 @@ const Calendar = props => {
   const [visible, setVisible] = useState(false);
   const [calendarType, setCalendarType] = useState("daily");
 
-  const [date, setDate] = useState(today);
-
   const [selectedDateRange, setSelectedDateRange] = useState({
-    // from: moment(),
-    // to: moment()
     date: moment()
   });
 
   const handleVisibleChange = () => {
+    if (selectedDateRange == null) {
+      setSelectedDateRange({ date: moment() });
+    }
     setVisible(prevState => {
       return !prevState;
     });
   };
 
   const handleClickDaily = () => {
-    setDate(today);
-    // setSelectedDateRange({
-    //   from: moment(),
-    //   to: moment()
-    // });
     setCalendarType("daily");
   };
 
   const handleClickWeekly = () => {
-    setDate(today);
-    // setSelectedDateRange({
-    //   from: moment(),
-    //   to: moment()
-    // });
     setCalendarType("weekly");
   };
 
   const handleClickMonthly = () => {
-    setDate(today);
-    // setSelectedDateRange({
-    //   from: moment(),
-    //   to: moment()
-    // });
     setCalendarType("monthly");
   };
 
   const handleClickYearly = () => {
-    setDate(today);
     setCalendarType("yearly");
   };
-
-  // const onClickMonthlyDate = dateRange => {
-  //   setSelectedDateRange(dateRange);
-  // };
 
   const renderCalendar = () => {
     if (calendarType === "daily") {
