@@ -5,34 +5,33 @@ import {
   DailyCalendarContext,
   WeeklyCalendarContext,
   MonthlyCalendarContext,
-  YearlyCalendarContext
+  YearlyCalendarContext,
 } from "./calendarContext";
 import DailyCalendar from "./dailyCalendar";
 import WeeklyCalendar from "./weeklyCalendar";
 import MonthlyCalendar from "./monthlyCalendar";
-import YearlyCalendar from "./yearlyCalendar";
 
 import { Card, Button, Input, Icon, Dropdown, Row, Col, List } from "antd";
 
 const today = {
   fullDate: moment().format("DD-MM-YYYY"),
   currentMonth: moment().format("MM"),
-  currentYear: moment().format("YYYY")
+  currentYear: moment().format("YYYY"),
 };
 
-const Calendar = props => {
+const Calendar = (props) => {
   const [visible, setVisible] = useState(false);
   const [calendarType, setCalendarType] = useState("daily");
 
   const [selectedDateRange, setSelectedDateRange] = useState({
-    date: moment()
+    date: moment(),
   });
 
   const handleVisibleChange = () => {
     if (selectedDateRange == null) {
       setSelectedDateRange({ date: moment() });
     }
-    setVisible(prevState => {
+    setVisible((prevState) => {
       return !prevState;
     });
   };
@@ -49,17 +48,13 @@ const Calendar = props => {
     setCalendarType("monthly");
   };
 
-  const handleClickYearly = () => {
-    setCalendarType("yearly");
-  };
-
   const renderCalendar = () => {
     if (calendarType === "daily") {
       return (
         <DailyCalendarContext.Provider
           value={{
             selectedDateRange,
-            setSelectedDateRange
+            setSelectedDateRange,
           }}
         >
           <DailyCalendar />
@@ -70,7 +65,7 @@ const Calendar = props => {
         <WeeklyCalendarContext.Provider
           value={{
             selectedDateRange,
-            setSelectedDateRange
+            setSelectedDateRange,
           }}
         >
           <WeeklyCalendar />
@@ -81,20 +76,13 @@ const Calendar = props => {
         <MonthlyCalendarContext.Provider
           value={{
             selectedDateRange,
-            setSelectedDateRange
+            setSelectedDateRange,
           }}
         >
           <MonthlyCalendar />
         </MonthlyCalendarContext.Provider>
       );
     }
-    // else if (calendarType === "yearly") {
-    //   return (
-    //     <YearlyCalendarContext.Provider value={{}}>
-    //       <YearlyCalendar />
-    //     </YearlyCalendarContext.Provider>
-    //   );
-    // }
   };
 
   const menu = (
@@ -103,9 +91,9 @@ const Calendar = props => {
         gutter={8}
         className="calendar-menu__row"
         type="flex"
-        justify="center"
+        justify="space-around"
       >
-        <Col span={6}>
+        <Col>
           <Button
             className={
               calendarType === "daily"
@@ -114,10 +102,10 @@ const Calendar = props => {
             }
             onClick={handleClickDaily}
           >
-            Harian
+            Daily
           </Button>
         </Col>
-        <Col span={6}>
+        <Col>
           <Button
             className={
               calendarType === "weekly"
@@ -126,10 +114,10 @@ const Calendar = props => {
             }
             onClick={handleClickWeekly}
           >
-            Mingguan
+            Weekly
           </Button>
         </Col>
-        <Col span={6}>
+        <Col>
           <Button
             className={
               calendarType === "monthly"
@@ -138,19 +126,7 @@ const Calendar = props => {
             }
             onClick={handleClickMonthly}
           >
-            Bulanan
-          </Button>
-        </Col>
-        <Col span={6}>
-          <Button
-            className={
-              calendarType === "yearly"
-                ? "calendar-menu__button__active"
-                : "calendar-menu__button"
-            }
-            onClick={handleClickYearly}
-          >
-            Tahunan
+            Monthly
           </Button>
         </Col>
       </Row>

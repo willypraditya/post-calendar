@@ -16,7 +16,7 @@ const DailyCalendar = () => {
 
   const [monthAndYear, setMonthAndYear] = useState({
     year: moment().year(),
-    month: moment().month() + 1
+    month: moment().month() + 1,
   });
 
   const [clickCount, setClickCount] = useState(0);
@@ -25,7 +25,7 @@ const DailyCalendar = () => {
     getCalendarDates(monthAndYear.year, monthAndYear.month)
   );
 
-  const reloadCalendar = x => {
+  const reloadCalendar = (x) => {
     let calendar = getCalendarDates(x.year, x.month);
     setMonthAndYear(x);
     setCurrentDailyCalendar(calendar);
@@ -45,7 +45,7 @@ const DailyCalendar = () => {
 
     setHoveredDateRange({
       from,
-      to
+      to,
     });
   };
 
@@ -97,7 +97,7 @@ const DailyCalendar = () => {
 
   return (
     <DailyCalendarContext.Consumer>
-      {value => {
+      {(value) => {
         const onRangeSelectedFromDailyCalendar = (from, to) => {
           if (from > to) {
             [from, to] = [to, from];
@@ -105,12 +105,12 @@ const DailyCalendar = () => {
 
           if (moment(from).isSame(to)) {
             value.setSelectedDateRange({
-              date: from
+              date: from,
             });
           } else
             value.setSelectedDateRange({
               from,
-              to
+              to,
             });
         };
 
@@ -127,14 +127,14 @@ const DailyCalendar = () => {
               setDatePick(null);
             }
           }
-          setClickCount(prevState => prevState + 1);
+          setClickCount((prevState) => prevState + 1);
         };
 
         return (
           <div className="calendar-daily-component">
             <MonthHeaderSelector
               monthAndYear={monthAndYear}
-              onChange={x => reloadCalendar(x)}
+              onChange={(x) => reloadCalendar(x)}
             />
             <div className="calendar-daily-component__body">
               <Row
@@ -168,7 +168,7 @@ const DailyCalendar = () => {
                                   {moment(day).format("D")}
                                 </p>
                                 <p className="calendar-daily-component__body__dates__today__text">
-                                  Hari Ini
+                                  Today
                                 </p>
                               </div>
                             ) : (

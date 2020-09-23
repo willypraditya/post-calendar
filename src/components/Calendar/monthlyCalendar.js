@@ -8,7 +8,7 @@ import { Button, Icon, Row, Col } from "antd";
 const MonthlyCalendar = () => {
   const [monthAndYear, setMonthAndYear] = useState({
     year: moment().year(),
-    month: moment().month() + 1
+    month: moment().month() + 1,
   });
 
   const chunckMonth = () => {
@@ -26,28 +26,28 @@ const MonthlyCalendar = () => {
     let to = new Date(year, month, 0);
     return {
       from,
-      to
+      to,
     };
   };
 
-  const onClickMonthlyPrevYear = year => () => {
-    setMonthAndYear(prevState => ({
+  const onClickMonthlyPrevYear = (year) => () => {
+    setMonthAndYear((prevState) => ({
       ...prevState,
-      year: parseInt(year) - 1
+      year: parseInt(year) - 1,
     }));
   };
 
-  const onClickMonthlyNextYear = year => () => {
-    setMonthAndYear(prevState => ({
+  const onClickMonthlyNextYear = (year) => () => {
+    setMonthAndYear((prevState) => ({
       ...prevState,
-      year: parseInt(year) + 1
+      year: parseInt(year) + 1,
     }));
   };
 
   return (
     <MonthlyCalendarContext.Consumer>
-      {value => {
-        const onClickMonthlyDate = dateRange => {
+      {(value) => {
+        const onClickMonthlyDate = (dateRange) => {
           value.setSelectedDateRange(dateRange);
         };
         return (
@@ -83,10 +83,10 @@ const MonthlyCalendar = () => {
             </Row>
 
             <div className="calendar-monthly-component__body">
-              {chunckMonth().map(chunkedMonths => {
+              {chunckMonth().map((chunkedMonths) => {
                 return (
                   <Row type="flex" justify="center" gutter={[1, 16]}>
-                    {chunkedMonths.map(month => {
+                    {chunkedMonths.map((month) => {
                       let monthRange = getMonthRange(monthAndYear.year, month);
                       const { from, to } = monthRange;
 
@@ -116,7 +116,7 @@ const MonthlyCalendar = () => {
                                     .format("MMMM")}
                                 </p>
                                 <p className="calendar-monthly-component__body__month-button__this-month__text">
-                                  Bulan Ini
+                                  Current Month
                                 </p>
                               </div>
                             ) : (

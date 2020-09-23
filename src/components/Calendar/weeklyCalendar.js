@@ -9,7 +9,7 @@ import { Button, Icon, Row, Col, List } from "antd";
 import { getWeekRangeList } from "./utils";
 
 const WeeklyCalendar = () => {
-  const reloadCalendar = x => {
+  const reloadCalendar = (x) => {
     let calendar = getWeekRangeList(x.year, x.month);
     setMonthAndYear(x);
     setWeeklyCalendar(calendar);
@@ -17,7 +17,7 @@ const WeeklyCalendar = () => {
 
   const [monthAndYear, setMonthAndYear] = useState({
     year: moment().year(),
-    month: moment().month() + 1
+    month: moment().month() + 1,
   });
 
   const [weeklyCalendar, setWeeklyCalendar] = useState(
@@ -26,15 +26,15 @@ const WeeklyCalendar = () => {
 
   return (
     <WeeklyCalendarContext.Consumer>
-      {value => {
-        const onClickWeeklyDate = dateRange => {
+      {(value) => {
+        const onClickWeeklyDate = (dateRange) => {
           value.setSelectedDateRange(dateRange);
         };
         return (
           <div className="calendar-weekly-component">
             <MonthHeaderSelector
               monthAndYear={monthAndYear}
-              onChange={x => reloadCalendar(x)}
+              onChange={(x) => reloadCalendar(x)}
             />
             <div className="calendar-weekly-component__body">
               <List>
@@ -69,7 +69,7 @@ const WeeklyCalendar = () => {
                                   Minggu ke-{index + 1}
                                 </p>
                                 <p className="calendar-weekly-component__body__this-week__week-count__text">
-                                  Minggu Ini
+                                  Current Week
                                 </p>
                               </div>
                             ) : (

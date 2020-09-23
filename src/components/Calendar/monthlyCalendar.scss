@@ -1,69 +1,70 @@
 .calendar-monthly-component {
-    border: 0px;
-    text-align: center;
-  
-    &__header {
-      border-width: 1px 0px 1px 0px;
-      border-style: solid;
-      border-color: #e6e6e6;
-      padding: 15px 0px 5px 0px;
-      &__prev-year-button {
-        float: left;
-        border: 0px;
-        margin-top: -3px;
-      }
-  
-      &__next-year-button {
-        float: right;
-        border: 0px;
-        margin-top: -3px;
-      }
-    }
-  
-    &__body{
-      margin-top: 20px;
-      margin-bottom: 20px;
+  border: 0px;
+  text-align: center;
 
-      &__month-button{
+  &__header {
+    border-width: 1px 0px 1px 0px;
+    border-style: solid;
+    border-color: #e6e6e6;
+    padding: 15px 0px 5px 0px;
+    &__prev-year-button {
+      float: left;
+      border: 0px;
+      margin-top: -3px;
+    }
+
+    &__next-year-button {
+      float: right;
+      border: 0px;
+      margin-top: -3px;
+    }
+  }
+
+  &__body {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    &__month-button {
+      width: 100px;
+      height: 56px;
+      color: #000000;
+      &:hover {
+        color: #000000;
+        border-color: #fdcb24;
+        background-color: #fdcb24;
+      }
+      &:focus {
+        color: #000000;
+        border-color: #fdcb24;
+        background-color: #fdcb24;
+      }
+
+      &__active {
         width: 100px;
         height: 56px;
-        color: #000000;
+        background-color: #fdcb24;
         &:hover {
           color: #000000;
-          border-color:#fdcb24;
+          border-color: #fdcb24;
           background-color: #fdcb24;
         }
         &:focus {
           color: #000000;
-          border-color:#fdcb24;
+          border-color: #fdcb24;
           background-color: #fdcb24;
         }
+      }
 
-        &__active{
-          width: 100px;
-          height: 56px;
-          background-color: #fdcb24;
-          &:hover {
-            color: #000000;
-            border-color:#fdcb24;
-            background-color: #fdcb24;
-          }
-          &:focus {
-            color: #000000;
-            border-color:#fdcb24;
-            background-color: #fdcb24;
-          }
-        }
-
-        &__this-month{
+      &__this-month {
+        color: #000000;
+        margin-top: 10px;
+        &__text {
           color: #000000;
-          margin-top: 10px;
-          &__text{
-            color: #000000;
-            font-size: 12px;
-            margin-top: -15px
-          }
+          font-size: 12px;
+          margin-top: -15px;
+          margin-left: -4px;
         }
       }
     }
   }
+}
